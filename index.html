@@ -3,256 +3,171 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>WHATSAPP STATUS BOOST</title>
+  <title>VCF Contacts Pro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #eef3f7;
-      margin: 0;
-      padding: 0;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      animation: fadeIn 0.6s ease-in;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    header {
-      background: #003c6c;
+      background: linear-gradient(to right, #141e30, #243b55);
+      font-family: 'Inter', sans-serif;
       color: white;
-      padding: 1rem 2rem;
-      width: 100%;
-      text-align: center;
+      padding: 30px;
     }
-    section {
-      max-width: 700px;
-      width: 100%;
-      padding: 1rem;
+    .container {
+      max-width: 800px;
+      margin: auto;
     }
-    input, button {
-      padding: 10px;
-      margin: 0.5rem 0;
-      width: 100%;
-      border-radius: 6px;
-      border: 1px solid #ccc;
+    .card {
+      background-color: rgba(255,255,255,0.08);
+      border: none;
+      border-radius: 15px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
-    button {
-      background-color: #003c6c;
-      color: white;
-      cursor: pointer;
-      transition: background 0.3s;
+    .btn {
+      border-radius: 25px;
     }
-    button:hover {
-      background-color: #005e99;
-    }
-    .box {
-      background: white;
-      border-radius: 10px;
-      padding: 1rem;
-      margin-top: 1rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      animation: fadeIn 0.7s ease-in-out;
-    }
-    .notification {
-      background: #fff3cd;
-      border: 1px solid #ffeeba;
-      padding: 1rem;
-      margin-top: 1rem;
-      border-radius: 8px;
-    }
-    .flex-row {
-      display: flex;
-      gap: 10px;
-    }
-    .loader {
-      height: 30px;
-      background: #cfd8dc;
-      border-radius: 20px;
+    .loading-bar {
+      height: 10px;
+      background-color: #eee;
+      border-radius: 5px;
       overflow: hidden;
-      position: relative;
       margin-top: 10px;
     }
-    .loader-progress {
+    .loading-fill {
+      width: 0;
       height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #00c853, #64dd17);
-      color: white;
-      font-weight: bold;
-      text-align: center;
-      line-height: 30px;
-      transition: width 0.3s ease;
+      background: linear-gradient(to right, #ff6a00, #ee0979);
+      animation: loading 2s infinite;
     }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+    @keyframes loading {
+      0% { width: 0; }
+      100% { width: 100%; }
     }
-    .stat-box {
-      background: #f1f8e9;
-      padding: 1rem;
-      text-align: center;
-      border-radius: 8px;
-      box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
-    }
-    .info-footer {
-      margin-top: 2rem;
+    .footer {
+      margin-top: 50px;
       font-size: 14px;
-      text-align: center;
-      color: #555;
+      color: #ccc;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>📇 VCF WORLD 2025 ONLINE</h1>
-    <p>Upload, download, and analyze your contacts in real-time</p>
-  </header>
-  <section>
-    <div class="box">
-      <h2>Upload VCF File</h2>
-      <input type="file" id="vcfFile" accept=".vcf" />
-      <button onclick="uploadVCF()">Upload VCF</button>
-      <div class="loader"><div id="progressBar" class="loader-progress">0%</div></div>
-      <div id="downloadLinkBox"></div>
-    </div>
-    <div class="box">
-      <h2>Add Single Contact</h2>
-      <input type="text" id="username" placeholder="Full Name" />
-      <input type="text" id="phone" placeholder="Phone Number (e.g. +263...)" />
-      <button onclick="addSingleContact()">Add Contact</button>
-    </div>
-    <div class="box">
-      <h2>Download VCF File</h2>
-      <input type="text" id="dlName" placeholder="Enter your name to download" />
-      <button onclick="downloadVCF()">Download</button>
-    </div>
-    <div class="box" id="stats">
-      <h2>📊 Statistics</h2>
-      <div class="stats-grid">
-        <div class="stat-box">
-          <strong id="totalContacts">0</strong>
-          <div>Total Contacts</div>
-        </div>
-        <div class="stat-box">
-          <strong id="totalCountries">0</strong>
-          <div>Countries</div>
-        </div>
-        <div class="stat-box">
-          <strong id="uploadCount">0</strong>
-          <div>Uploaded Files</div>
-        </div>
-        <div class="stat-box">
-          <strong id="downloadCount">0</strong>
-          <div>Downloads</div>
-        </div>
-      </div>
-      <p style="margin-top: 1rem;">Countries Detected: <span id="countriesList">Loading...</span></p>
-    </div>
-    <div class="notification">
-      <p>📣 Join our WhatsApp group for updates and support!</p>
-      <div class="flex-row">
-        <button onclick="window.open('https://chat.whatsapp.com/LSnwN0u2F3hGUh07v8FANs', '_blank')">Join</button>
-        <button onclick="alert('You\'re already in!')">Already Joined</button>
-      </div>
-    </div>
-    <div class="box">
-      <h3>ℹ️ How It Works</h3>
-      <ul>
-        <li>Upload or manually submit contacts in VCF format.</li>
-        <li>Track real-time stats of global contacts shared.</li>
-        <li>Enter your name to unlock download link.</li>
-        <li>Built for speed, simplicity, and sharing.</li>
-      </ul>
-      <h4>👨‍💻 Created By</h4>
-      <p><strong>WORLD OF TECHNOLOGY TEAM</strong> — Global contact simplification, redefined.</p>
-    </div>
-    <div class="info-footer">
-      &copy; 2025 PAID TECH ZONE TEAM VCF Contact Manager. All rights reserved.
-    </div>
-  </section>
-  <script>
-    const API = 'https://vcf-pro.onrender.com';
 
-    function setProgress(percent) {
-      const bar = document.getElementById('progressBar');
-      bar.style.width = percent + '%';
-      bar.textContent = percent + '%';
-    }
+  <div class="container">
+    <h2 class="text-center mb-4">📇 VCF Contacts Pro</h2>
+
+    <div class="card">
+      <h4>Upload Full VCF File</h4>
+      <input type="file" id="vcfFile" class="form-control my-2"/>
+      <input type="text" id="email" class="form-control my-2" placeholder="Your Name or Email">
+      <button class="btn btn-success" onclick="uploadVCF()">Upload File</button>
+      <div class="loading-bar"><div class="loading-fill"></div></div>
+      <div id="uploadResult" class="mt-3"></div>
+    </div>
+
+    <div class="card">
+      <h4>➕ Add Single Contact</h4>
+      <input type="text" id="singleName" class="form-control my-2" placeholder="Username">
+      <input type="text" id="singleNumber" class="form-control my-2" placeholder="Phone Number (+123...)">
+      <button class="btn btn-primary" onclick="addSingle()">Add Contact</button>
+      <div class="loading-bar"><div class="loading-fill"></div></div>
+      <div id="singleResult" class="mt-3"></div>
+    </div>
+
+    <div class="card text-center">
+      <h4>📊 Global Stats</h4>
+      <div id="stats">Loading...</div>
+    </div>
+
+    <div class="card text-center">
+      <h5>🔔 Join our WhatsApp Group</h5>
+      <a href="https://chat.whatsapp.com/your-group-link" class="btn btn-outline-light mt-2">Join Group</a>
+    </div>
+
+    <div class="footer text-center">
+      Built by Tcroneb Hackx | Powered by VCF-Pro
+    </div>
+  </div>
+
+  <script>
+    const apiUrl = "https://vcf-pro.onrender.com";
 
     async function uploadVCF() {
-      const fileInput = document.getElementById('vcfFile');
-      const downloadBox = document.getElementById('downloadLinkBox');
-      downloadBox.innerHTML = '';
-      if (!fileInput.files.length) return alert('Select a VCF file first.');
+      const file = document.getElementById("vcfFile").files[0];
+      const email = document.getElementById("email").value.trim();
+      if (!file) return alert("Please choose a VCF file.");
 
-      setProgress(10);
       const formData = new FormData();
-      formData.append('vcf', fileInput.files[0]);
+      formData.append("vcf", file);
+      formData.append("email", email || "anonymous");
 
-      const res = await fetch(`${API}/upload`, {
-        method: 'POST',
-        body: formData
-      });
-      const data = await res.json();
-      setProgress(100);
-      alert(data.message);
-      if (data.downloadLink) {
-        downloadBox.innerHTML = `<p>✅ <a href="${API}${data.downloadLink}" target="_blank">Download your uploaded VCF</a></p>`;
+      document.querySelectorAll(".loading-fill")[0].style.width = "0%";
+      document.querySelectorAll(".loading-fill")[0].style.animation = "loading 2s infinite";
+
+      try {
+        const res = await fetch(`${apiUrl}/upload`, {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
+        if (data.downloadLink) {
+          document.getElementById("uploadResult").innerHTML = `✅ ${data.message}<br><a href="${apiUrl}${data.downloadLink}" class="btn btn-light mt-2">Download Processed File</a>`;
+        } else {
+          document.getElementById("uploadResult").innerText = data.error || "❌ Upload failed.";
+        }
+      } catch (err) {
+        document.getElementById("uploadResult").innerText = "❌ Upload error. Please try again.";
       }
+
       fetchStats();
     }
 
-    async function addSingleContact() {
-      const name = document.getElementById('username').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      if (!name || !phone) return alert('Fill in both name and phone');
+    async function addSingle() {
+      const name = document.getElementById("singleName").value.trim();
+      const number = document.getElementById("singleNumber").value.trim();
+      if (!name || !number) return alert("Enter both name and phone number.");
 
-      const vcfContent = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTEL:${phone}\nEND:VCARD`;
-      const blob = new Blob([vcfContent], { type: 'text/vcard' });
-      const file = new File([blob], 'single_contact.vcf', { type: 'text/vcard' });
+      const fakeVCF = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTEL:${number}\nEND:VCARD`;
+      const blob = new Blob([fakeVCF], { type: "text/vcard" });
 
       const formData = new FormData();
-      formData.append('vcf', file);
-      formData.append('email', 'manual-entry');
+      formData.append("vcf", blob);
+      formData.append("email", name);
 
-      const res = await fetch(`${API}/upload`, {
-        method: 'POST',
-        body: formData
-      });
-      const data = await res.json();
-      alert(data.message);
+      document.querySelectorAll(".loading-fill")[1].style.width = "0%";
+      document.querySelectorAll(".loading-fill")[1].style.animation = "loading 2s infinite";
+
+      try {
+        const res = await fetch(`${apiUrl}/upload`, {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
+        document.getElementById("singleResult").innerText = data.message || data.error || "❌ Failed to add contact.";
+      } catch (err) {
+        document.getElementById("singleResult").innerText = "❌ Network error.";
+      }
+
       fetchStats();
-    }
-
-    async function downloadVCF() {
-      const name = document.getElementById('dlName').value.trim();
-      if (!name) return alert('Please enter your name before downloading');
-
-      const res = await fetch(`${API}/latest-file`); // example endpoint for download
-      const file = await res.blob();
-      const url = window.URL.createObjectURL(file);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `contacts_${Date.now()}.vcf`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
     }
 
     async function fetchStats() {
-      const res = await fetch(`${API}/stats`);
-      const stats = await res.json();
-      document.getElementById('totalContacts').textContent = stats.totalContacts;
-      document.getElementById('totalCountries').textContent = stats.totalCountries;
-      document.getElementById('countriesList').textContent = stats.countries.join(', ');
-      if (stats.totalUploads) document.getElementById('uploadCount').textContent = stats.totalUploads;
-      if (stats.totalDownloads) document.getElementById('downloadCount').textContent = stats.totalDownloads;
+      try {
+        const res = await fetch(`${apiUrl}/stats`);
+        const data = await res.json();
+        document.getElementById("stats").innerHTML = `
+          <b>Total Contacts:</b> ${data.totalContacts}<br>
+          <b>Countries:</b> ${data.totalCountries}<br>
+          <b>Uploads:</b> ${data.totalUploads} | <b>Downloads:</b> ${data.totalDownloads}
+        `;
+      } catch {
+        document.getElementById("stats").innerText = "❌ Unable to fetch stats.";
+      }
     }
 
-    window.onload = fetchStats;
+    fetchStats();
   </script>
+
 </body>
 </html>
